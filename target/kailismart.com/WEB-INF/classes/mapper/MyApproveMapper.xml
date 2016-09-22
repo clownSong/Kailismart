@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.MyApproveMapper">
+    <insert id="addMyApprove" parameterType="com.kailismart.com.entity.MyApprove">
+        INSERT INTO sdpo006
+        (po00601,po00602,po00603,po00604,po00605,po00611,po00612)
+        VALUES(#{ID},#{acceptDate},#{sendPerson},#{name},#{title},#{frameCoding},#{frameId});
+    </insert>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.CompanyMapper">
+    <resultMap id="company" type="com.kailismart.com.entity.Company">
+        <id column="pf00301" jdbcType="VARCHAR" property="ID"></id>
+        <result column="pf00302" jdbcType="VARCHAR" property="name"></result>
+        <result column="pf00303" jdbcType="VARCHAR" property="folder"></result>
+        <result column="pf00316" jdbcType="TINYINT" property="isSupply" javaType="byte"></result>
+        <result column="pf00348" jdbcType="TINYINT" property="isClient" javaType="byte"></result>
+        <result column="pf00311" jdbcType="VARCHAR" property="logDate" javaType="String"></result>
+        <result column="pf00343" jdbcType="VARCHAR" property="unitNumber" javaType="String"></result>
+        <result column="pf00335" jdbcType="VARCHAR" property="relationP" javaType="String"></result>
+        <result column="pf00336" jdbcType="VARCHAR" property="telephoneP" javaType="String"></result>
+        <result column="pf00337" jdbcType="VARCHAR" property="emailP" javaType="String"></result>
+        <result column="pf00338" jdbcType="VARCHAR" property="tel" javaType="String"></result>
+        <result column="pf00340" jdbcType="VARCHAR" property="taxNumber" javaType="String"></result>
+        <result column="pf00342" jdbcType="VARCHAR" property="bankNumber" javaType="String"></result>
+        <result column="pf00341" jdbcType="VARCHAR" property="openAccount" javaType="String"></result>
+        <result column="pf00308" jdbcType="VARCHAR" property="address" javaType="String"></result>
+    </resultMap>
+    <resultMap id="companyJane" type="com.kailismart.com.entity.Company">
+        <id column="pf00301" jdbcType="VARCHAR" property="ID"></id>
+        <result column="pf00302" jdbcType="VARCHAR" property="name"></result>
+    </resultMap>
+    <resultMap id="count" type="com.kailismart.com.entity.Count">
+        <id property="ID" column="pf00301" jdbcType="VARCHAR"></id>
+        <result property="myCount" column="myCount" jdbcType="INTEGER"></result>
+    </resultMap>
+    <select id="getCompanyById" parameterType="String" resultMap="companyJane">
+        SELECT * FROM sdpf003 WHERE pf00301=#{id};
+    </select>
+    <select id="getCompanyBySupply" resultMap="companyJane">
+        SELECT pf00301,pf00302 FROM sdpf003 WHERE pf00316=1;
+    </select>
+    <select id="count" parameterType="INTEGER" resultType="INTEGER">
+        SELECT count(pf00301) FROM sdpf003 WHERE pf00316=#{type};
+    </select>
+    <select id="seek" parameterType="String" resultMap="companyJane">
+        SELECT pf00301,pf00302 FROM sdpf003 WHERE pf00316=1 AND pf00302 LIKE '%'+#{name}+'%';
+    </select>
+    <select id="getSumCount" resultMap="count">
+        SELECT TOP 20 pm01304 AS id,COUNT(pm01304) AS myCount from sdpm013 GROUP BY pm01304 ORDER BY count(pm01304) DESC;
+    </select>
+    <select id="getCompanyByList" resultMap="companyJane" parameterType="java.util.List">
+        SELECT * FROM sdpf003 WHERE pf00301 in
+        <foreach collection="list" item="co" open="(" close=");" separator=",">
+            #{co.ID}
+        </foreach>
+    </select>
+
+    <select id="getSumCountByOut" resultMap="count">
+        SELECT TOP 20 pm02008 AS id,COUNT(pm02008) AS myCount from sdpm020 GROUP BY pm02008 ORDER BY count(pm02008) DESC;
+    </select>
+
+    <select id="seekAll" resultMap="companyJane">
+        SELECT pf00301,pf00302 FROM sdpf003 WHERE pf00302 LIKE '%'+#{name}+'%';
+    </select>
+</mapper>

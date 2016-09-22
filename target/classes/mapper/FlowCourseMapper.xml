@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.FlowCourseMapper">
+    <resultMap id="flowCourse" type="com.kailismart.com.entity.FlowCourse">
+        <id column="po02001" property="ID" jdbcType="VARCHAR"></id>
+        <result column="po02002" property="flowId" jdbcType="VARCHAR"></result>
+        <result column="po02003" property="serial" jdbcType="INTEGER"></result>
+        <result column="po02004" property="name" jdbcType="VARCHAR"></result>
+        <result column="po02008" property="pubPerson" jdbcType="INTEGER"></result>
+        <collection property="personList" column="po02001" select="com.kailismart.com.mapper.CoursePersonMapper.getPersonByCourseId" ></collection>
+    </resultMap>
+    <select id="getFlowCourseFirst" parameterType="String" resultMap="flowCourse">
+        SELECT TOP 1 po02001,po02002,po02003,po02004,po02008 FROM sdpo020 WHERE po02002=#{flowId} ORDER BY po02003 ASC;
+    </select>
+    <select id="getFlowCourseByFlow" parameterType="String" resultMap="flowCourse">
+        SELECT po02001,po02002,po02003,po02004,po02008 FROM sdpo020 WHERE po02002=#{flowId} ORDER  BY po02003 ASC;
+    </select>
+    <insert id="addFlowCourseB" parameterType="com.kailismart.com.entity.FlowCourse">
+        INSERT INTO sdpo020b (po020b01,po020b02,po020b03,po020b04,po020b05,po020b06,po020b07,
+        po020b08,po020b09,po020b10,po020b11,po020b12,po020b13,po020b14,po020b15,po020b16,po020b17,po020b18,po020b19,po020b20,po020b26)
+        VALUES(#{ID},#{flowId},#{serial},#{name},#{po02005},#{po02006},#{po02007},#{pubPerson},#{po02009},#{po02010},
+        #{po02011},#{po02012},#{po02013},#{po02014},#{po02015},#{po02016},#{po02017},#{po02018},#{po02019},#{po02020},#{po02021});
+    </insert>
+    <insert id="addFlowCourseBInstance" parameterType="com.kailismart.com.entity.FlowCourse">
+        INSERT INTO sdpo020b_Instance (po020b01,po020b02,po020b03,po020b04,po020b05,po020b06,po020b07,
+        po020b08,po020b09,po020b10,po020b11,po020b12,po020b13,po020b14,po020b15,po020b16,po020b17,po020b18,po020b19,po020b20,po020b26)
+        VALUES(#{ID},#{flowId},#{serial},#{name},#{po02005},#{po02006},#{po02007},#{pubPerson},#{po02009},#{po02010},
+        #{po02011},#{po02012},#{po02013},#{po02014},#{po02015},#{po02016},#{po02017},#{po02018},#{po02019},#{po02020},#{po02021});
+    </insert>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.StorageMapper">
+    <resultMap id="storage" type="com.kailismart.com.entity.Storage">
+        <id column="pm00401" jdbcType="VARCHAR" property="ID"></id>
+        <result column="pm00402" jdbcType="VARCHAR" property="name"></result>
+    </resultMap>
+
+    <resultMap id="mater" type="com.kailismart.com.entity.StorageMater">
+        <result column="pm00501" jdbcType="VARCHAR" property="storageId"></result>
+        <result column="pm00503" jdbcType="DECIMAL" property="sum"></result>
+        <result column="pm00504" jdbcType="DECIMAL" property="price"></result>
+        <result column="pm00505" jdbcType="DECIMAL" property="money"></result>
+        <result column="pm00506" jdbcType="VARCHAR" property="pm00506"></result>
+        <association property="material" column="pm00502" select="com.kailismart.com.mapper.MaterialMapper.getMaterialByID"></association>
+    </resultMap>
+    <select id="getStorageById" resultMap="storage" parameterType="String">
+        SELECT pm00401,pm00402 FROM sdpm004 WHERE pm00401=#{id};
+    </select>
+    <select id="getStorages" resultMap="storage">
+        SELECT pm00401,pm00402 FROM sdpm004 ORDER BY pm00414 DESC;
+    </select>
+
+    <insert id="addStorageMaters" parameterType="java.util.List">
+        INSERT INTO sdpm005 (pm00501,pm00502,pm00503,pm00504,pm00505,pm00506)
+        VALUES
+        <foreach collection="maters" item="mater" separator=",">
+            (#{mater.storageId},#{mater.material.ID},#{mater.sum},#{mater.price},#{mater.money},#{mater.pm00506})
+        </foreach>
+    </insert>
+
+    <insert id="addStorageMater" parameterType="com.kailismart.com.entity.StorageMater">
+        INSERT INTO sdpm005 (pm00501,pm00502,pm00503,pm00504,pm00505,pm00506)
+        VALUES(#{storageId},#{material.ID},#{sum},#{price},#{money},#{pm00506});
+    </insert>
+
+    <select id="getStorageMater" resultMap="mater">
+        SELECT * FROM sdpm005 WHERE pm00501=#{id} AND pm00502=#{materId};
+    </select>
+
+    <update id="updateStorageMater" parameterType="com.kailismart.com.entity.StorageMater">
+        UPDATE sdpm005 SET pm00503=#{sum},pm00504=#{price},pm00505=#{money} WHERE pm00501=#{storageId} AND pm00502=#{material.ID};
+    </update>
+
+    <select id="getMaterByStorageId" resultMap="mater">
+        SELECT * FROM sdpm005 WHERE pm00501=#{storageId} AND pm00503 &gt; 0;
+    </select>
+
+    <select id="getMaterByStorageIds" resultMap="mater">
+        SELECT * FROM sdpm005 WHERE pm00501=#{storageId};
+    </select>
+</mapper>

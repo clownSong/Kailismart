@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.PutStorageMaterialMapper">
+    <resultMap id="storageMaterial" type="com.kailismart.com.entity.StorageMaterial">
+        <id column="pm02702" jdbcType="VARCHAR" property="ID"></id>
+        <result column="pm02701" jdbcType="VARCHAR" property="storageId"></result>
+        <result column="pm02705" jdbcType="DECIMAL" property="inSum"></result>
+        <result column="pm02706" jdbcType="DECIMAL" property="putSum"></result>
+        <result column="pm02707" jdbcType="DECIMAL" property="price"></result>
+        <result column="pm02708" jdbcType="DECIMAL" property="money"></result>
+        <result column="pm02709" jdbcType="DECIMAL" property="taxPrice"></result>
+        <result column="pm02710" jdbcType="DECIMAL" property="moneyTax"></result>
+        <result column="pm02711" jdbcType="DECIMAL" property="taxMoney"></result>
+        <result column="pm02712" jdbcType="VARCHAR" property="proMaterId"></result>
+        <result column="pm02723" jdbcType="VARCHAR" property="projectId"></result>
+        <association property="material" column="pm02703" select="com.kailismart.com.mapper.MaterialMapper.getMaterialByID"></association>
+        <association property="project" column="pm02723" select="com.kailismart.com.mapper.ProjectMapper.getProjectByID"></association>
+    </resultMap>
+
+    <resultMap id="fio" type="com.kailismart.com.entity.Fio">
+        <id column="fifoi_01id" jdbcType="DECIMAL" property="ID01"></id>
+        <result column="fifoi_02mat" jdbcType="VARCHAR" property="materId"></result>
+        <result column="fifoi_03date" jdbcType="VARCHAR" property="date"></result>
+        <result column="fifoi_04iqty" jdbcType="DECIMAL" property="putSum"></result>
+        <result column="fifoi_05rqty" jdbcType="DECIMAL" property="io05"></result>
+        <result column="FIFOI_06oqty" jdbcType="DECIMAL" property="io06"></result>
+        <result column="fifoi_07pri" jdbcType="DECIMAL" property="putPrice"></result>
+        <result column="fifoi_08iamt" jdbcType="DECIMAL" property="putMoney"></result>
+        <result column="fifoi_09tranID" jdbcType="VARCHAR" property="putMaterId"></result>
+        <result column="fifoi_10type" jdbcType="TINYINT" property="type"></result>
+    </resultMap>
+    <insert id="addMaterials" parameterType="java.util.List">
+        INSERT INTO sdpm027 (pm02701,pm02702,pm02703,pm02704,pm02705,pm02706,pm02707,pm02708,pm02709,
+        pm02710,pm02711,pm02712,pm02720,pm02723)
+        VALUES
+        <foreach collection="materials" item="item" index="index" separator="," >
+            (#{item.storageId},#{item.ID},#{item.material.ID},#{item.material.unit.ID},#{item.inSum},#{item.putSum},#{item.price},
+            #{item.money},#{item.taxPrice},
+            #{item.moneyTax},#{item.taxMoney},#{item.proMaterId},#{item.pm02720},
+            #{item.projectId})
+        </foreach>
+    </insert>
+    <select id="getMaterialByPutId" parameterType="String" resultMap="storageMaterial">
+        SELECT * FROM sdpm027 WHERE pm02701=#{putId};
+    </select>
+    <select id="getFifoiMax" resultType="java.lang.Double">
+        SELECT TOP 1 MAX(FIFOI_01id) FROM sdfifoi;
+    </select>
+    <insert id="addFifoi" parameterType="java.util.List">
+        INSERT INTO sdfifoi (FIFOI_01id,FIFOI_02mat,FIFOI_03date,
+        FIFOI_04iqty,FIFOI_05rqty,FIFOI_06oqty,FIFOI_07pri,FIFOI_08iamt,FIFOI_09tranID,FIFOI_10type)
+        VALUES
+        <foreach collection="fios" item="item" index="index" separator=",">
+            (#{item.ID01},#{item.materId},#{item.date},#{item.putSum},#{item.io05},#{item.io06},#{item.putPrice},#{item.putMoney},
+            #{item.putMaterId},#{item.type})
+        </foreach>
+    </insert>
+    <delete id="deleteMaterByPutId">
+        DELETE FROM sdpm027 WHERE pm02701=#{id};
+    </delete>
+    <delete id="deleteMaterById">
+        DELETE FROM sdpm027 WHERE pm02702=#{id};
+    </delete>
+    <delete id="deleteFifois">
+        DELETE FROM sdfifoi WHERE FIFOI_09tranID=#{id};
+    </delete>
+    <update id="updateMaterMoney" parameterType="com.kailismart.com.entity.StorageMaterial">
+        UPDATE sdpm027 SET pm02707=#{price},pm02708=#{money},pm02711=#{taxMoney} WHERE pm02702=#{ID};
+    </update>
+    <update id="updateMaterFifoio" parameterType="com.kailismart.com.entity.Fio">
+        UPDATE sdfifoi SET FIFOI_05rqty=#{io05},FIFOI_06oqty=#{io06} WHERE FIFOI_01id=#{ID01} AND FIFOI_09tranId=#{putMaterId};
+    </update>
+    <select id="getHistoryIdByMaterId" resultType="java.lang.Double">
+        SELECT TOP 1 MAX(fifoi_01id) FROM sdfifoi WHERE fifoi_02mat=#{materId};
+    </select>
+
+    <select id="getFioById" resultMap="fio">
+        SELECT * FROM sdfifoi WHERE fifoi_01id=#{id};
+    </select>
+    <select id="getFioByPutId" resultMap="fio">
+        SELECT TOP 1 * FROM sdfifoi WHERE FIFOI_09tranID=#{putMaterId};
+    </select>
+
+    <select id="getOkMaterSum" resultType="java.lang.Integer">
+        select COUNT(a.pm02701) from [prj-ntzm-test].[dbo].[sdpm027] as a
+        left join [prj-ntzm-test].[dbo].[sdFIFOI] as b on a.pm02702=b.FIFOI_09TranID
+          where pm02701=#{id} AND b.FIFOI_04IQty > b.FIFOI_06OQty;
+    </select>
+
+    <select id="getMaterialByCompany" resultMap="storageMaterial">
+        SELECT a.*,b.pm02602 AS putDate,b.pm02613 AS tax,b.pm02603 AS putNumber FROM sdpm027 AS a LEFT JOIN sdpm026 AS b ON a.pm02701=b.pm02601
+        WHERE b.pm02604=#{company} AND pm02602 BETWEEN #{start} AND #{end};
+    </select>
+</mapper>

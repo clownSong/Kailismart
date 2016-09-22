@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.RoleMapper">
+    <resultMap id="role" type="com.kailismart.com.entity.Role">
+        <id column="pj00501" jdbcType="VARCHAR" property="coding"></id>
+        <result column="pj00502" jdbcType="VARCHAR" property="name"></result>
+    </resultMap>
+    <select id="getStaffListByRoleCoding" parameterType="String" resultType="com.kailismart.com.entity.Staff">
+        SELECT a.pj00602 AS ID,b.pj00502 AS roleName,c.pj00402 AS name FROM
+        sdpj006 AS a LEFT JOIN sdpj005 AS b
+        ON b.pj00501=a.pj00601 LEFT JOIN sdpj004 AS c
+        ON c.pj00401=a.pj00602 WHERE pj00501=#{coding};
+    </select>
+</mapper>

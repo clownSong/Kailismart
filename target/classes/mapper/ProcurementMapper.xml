@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.ProcurementMapper">
+    <resultMap id="pro" type="com.kailismart.com.entity.Procurement">
+        <id column="pm01301" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pm01303" property="pmNumber" jdbcType="VARCHAR"></result>
+        <result column="pm01302" property="pmDate" jdbcType="VARCHAR"></result>
+        <result column="pm01316" property="tax" jdbcType="DECIMAL"></result>
+        <result column="pm01308" property="voucherDate" jdbcType="VARCHAR"></result>
+        <result column="pm01314" property="state" jdbcType="INTEGER"></result>
+        <result column="pm01321" property="putState" jdbcType="TINYINT"></result>
+        <association property="staff" column="pm01320"
+                     select="com.kailismart.com.mapper.StaffMapper.getStaffById"></association>
+        <association property="voucherName" javaType="String" column="pm01310"
+                     select="com.kailismart.com.mapper.StaffMapper.getNameByCoding">
+            <result javaType="String" jdbcType="VARCHAR" property="name" column="pj00402"></result>
+        </association>
+        <association property="auditName" column="pm01313"
+                     select="com.kailismart.com.mapper.StaffMapper.getNameByCoding">
+            <result property="name" javaType="String" jdbcType="VARCHAR" column="pj00402"></result>
+        </association>
+        <association property="company" column="pm01304" select="com.kailismart.com.mapper.CompanyMapper.getCompanyById"></association>
+        <association property="contract" column="pm01305" select="com.kailismart.com.mapper.ContractMapper.getContractById"></association>
+    </resultMap>
+
+    <resultMap id="proJanl" type="com.kailismart.com.entity.Procurement">
+        <id column="pm01301" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pm01303" property="pmNumber" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <select id="getProcurementById" parameterType="String" resultMap="pro">
+        SELECT * FROM sdpm013 as a WHERE pm01301=#{pId};
+    </select>
+    <select id="getProJanlById" resultMap="proJanl">
+        SELECT pm01301,pm01303 FROM sdpm013 WHERE pm01301=#{id};
+    </select>
+    <insert id="addProcurement" parameterType="com.kailismart.com.entity.Procurement">
+        INSERT INTO sdpm013 (pm01301,pm01302,pm01303,pm01304,pm01305,pm01306,pm01307,
+        pm01308,pm01309,pm01310,pm01311,pm01316,pm01320,pm01326,pm01312)
+        values(#{ID},#{pmDate},#{pmNumber},#{company.ID},#{contract.ID},#{city.ID},
+        #{remark},#{voucherDate},#{fqDate},#{voucherCoding},#{voucherCoding},#{tax},#{staff.ID},#{pm01326},#{pm01312});
+    </insert>
+    <select id="getProcurements" resultMap="pro">
+        SELECT * FROM sdpm013 WHERE pm01308 BETWEEN #{start} AND #{end} ORDER BY pm01308 DESC;
+    </select>
+    <select id="getProcurementAll" resultMap="pro">
+        SELECT * FROM sdpm013 ORDER BY pm01308 DESC;
+    </select>
+    <select id="getCount" resultType="Integer">
+        SELECT count(pm01301) FROM sdpm013 WHERE pm01308 BETWEEN #{start} AND #{end};
+    </select>
+    <update id="updateProcurement" parameterType="com.kailismart.com.entity.Procurement">
+        UPDATE sdpm013 SET pm01316=#{tax},pm01304=#{company.ID},pm01305=#{contract.ID},pm01311=#{voucherCoding} WHERE pm01301=#{ID};
+    </update>
+    <update id="updatePutState">
+        UPDATE sdpm013 SET pm01321=#{state} WHERE pm01301=#{proId};
+    </update>
+</mapper>

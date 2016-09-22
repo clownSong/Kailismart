@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.ContractMapper">
+    <resultMap id="contract" type="com.kailismart.com.entity.Contract">
+        <id column="pd00401" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pd00402" property="name" jdbcType="VARCHAR"></result>
+        <result jdbcType="DECIMAL" column="pd00409" property="price"></result>
+        <association property="partyB" column="pd00405" select="com.kailismart.com.mapper.CompanyMapper.getCompanyById"></association>
+    </resultMap>
+
+    <select id="getContractByCompany" parameterType="String" resultMap="contract">
+        SELECT pd00401,pd00402,pd00409,pd00405 FROM sdpd004 WHERE pd00405=#{companyId} AND pd00403='20IBAN7E' ORDER  BY pd00419 DESC;
+    </select>
+    <select id="getContracts" resultMap="contract">
+        SELECT * FROM sdpd004 WHERE pd00403='20IBAN7E' ORDER BY pd00419 DESC;
+    </select>
+    <select id="seek" parameterType="String" resultMap="contract">
+        SELECT pd00401,pd00402,pd00409,pd00405 FROM sdpd004 WHERE pd00403='20IBAN7E' AND pd00402 LIKE '%'+#{str}+'%';
+    </select>
+    <select id="getContractById" resultMap="contract" parameterType="String">
+        SELECT TOP 1 pd00402 FROM sdpd004 WHERE pd00401=#{id};
+    </select>
+</mapper>

@@ -1,0 +1,67 @@
+#printCon *{
+    font-family:"SimSun";
+    line-height: 0.3cm;
+}
+
+.title {
+    font-size: 26px;
+    font-weight: 400;
+    text-align: center;
+    width: 350px;
+    height:30px;
+    margin: auto;
+}
+
+.address, .fax, .put, .message {
+    transform: scale(0.975);
+    text-align: center;
+    width: 400px;
+    margin: auto;
+    font-weight:200;
+    height:30px;
+}
+
+.fax {
+    transform: scale(0.975);
+    font-weight: 300;
+    width:400px;
+    height:20px;
+}
+
+.put {
+
+}
+
+.message {
+    width: 300px;
+    float: left;
+    text-align: left;
+    font-weight:200;
+    margin-top:1px;
+}
+
+.messages {
+    width: 900px;
+    overflow: hidden;
+    margin: auto;
+    font-weight:200;
+}
+
+#materPrint {
+    text-align: center;
+    width: 890px;
+    margin: auto;
+    border-collapse: collapse;
+    font-weight:200;
+}
+
+#materPrint td, #materPrint th {
+    height:25px;
+    text-align: center;
+}
+.table-bordered>thead>tr>th, .table-bordered>thead>tr>td{
+    border-bottom-width: 2px;
+}
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td{
+    border: 1px solid #333;
+}

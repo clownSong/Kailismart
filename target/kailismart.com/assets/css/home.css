@@ -1,0 +1,13 @@
+body {
+    font-family: microsoft YaHei;
+}
+.main-content{
+    min-height:100%;
+    height:auto;
+}
+.no-border{
+    border:0px !important;
+}
+.width-100{
+    width:100%;
+}

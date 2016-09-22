@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.FlowMapper">
+    <resultMap id="flow" type="com.kailismart.com.entity.Flow">
+        <id column="po00101" jdbcType="VARCHAR" property="ID"></id>
+        <result column="po00102" jdbcType="VARCHAR" property="name"></result>
+        <result column="po00103" jdbcType="VARCHAR" property="remark"></result>
+        <result column="po00104" jdbcType="VARCHAR" property="folder"></result>
+        <result column="po00105" jdbcType="INTEGER" property="isPub"></result>
+        <result column="po00106" jdbcType="TINYINT" property="condition"></result>
+        <result column="po00107" jdbcType="VARCHAR" property="frameCoding"></result>
+        <result column="po00108" jdbcType="VARCHAR" property="pubFlow"></result>
+        <result column="po00110" jdbcType="VARCHAR" property="templement"></result>
+        <result column="po00111" jdbcType="TINYINT" property="type"></result>
+    </resultMap>
+    <resultMap id="flowJanl" type="com.kailismart.com.entity.Flow">
+        <id column="po00101" jdbcType="VARCHAR" property="ID"></id>
+        <result column="po00102" jdbcType="VARCHAR" property="name"></result>
+        <result column="po00107" jdbcType="VARCHAR" property="frameCoding"></result>
+    </resultMap>
+    <select id="getFlowByFrameCoding" resultMap="flowJanl" parameterType="String">
+        SELECT * FROM sdpo001 WHERE po00107=#{coding};
+    </select>
+    <select id="getFlorderARemarkAName" resultType="java.util.Map">
+        select po00104 AS folder,po00103 AS remark,po00102 AS name from sdpo001 WHERE po00101=#{ID};
+    </select>
+</mapper>

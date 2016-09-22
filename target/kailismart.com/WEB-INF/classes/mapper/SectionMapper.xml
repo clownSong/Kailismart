@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.SectionMapper">
+    <resultMap id="section" type="com.kailismart.com.entity.Section">
+        <id column="pj00301" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pj00302" property="name" jdbcType="VARCHAR"></result>
+        <result column="pj00303" property="parentID" jdbcType="VARCHAR"></result>
+        <result column="pj00305" property="managerID" jdbcType="VARCHAR"></result>
+        <result column="pj00306" property="tel" jdbcType="VARCHAR"></result>
+        <result column="pj00307" property="address" jdbcType="VARCHAR"></result>
+        <result column="pj00309" property="coding" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <resultMap id="sectionName" type="com.kailismart.com.entity.Section">
+        <id column="pj00301" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pj00302" property="name" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <select id="getSevtionByID" resultMap="sectionName" parameterType="String">
+        SELECT * FROM sdpj003 WHERE pj00301 = #{ID};
+    </select>
+</mapper>

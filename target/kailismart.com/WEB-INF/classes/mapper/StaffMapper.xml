@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.StaffMapper">
+    <resultMap id="staff" type="com.kailismart.com.entity.Staff">
+        <id column="pj00401" jdbcType="VARCHAR" property="ID"></id>
+        <result column="pj00402" property="name" jdbcType="VARCHAR"></result>
+        <result column="pj00403" property="sex" jdbcType="TINYINT"></result>
+        <result column="pj00421" property="coding" jdbcType="VARCHAR"></result>
+        <result column="pj00417" property="sectionCoding" jdbcType="VARCHAR"></result>
+        <result column="pj00420" property="tel" jdbcType="VARCHAR"></result>
+        <result column="pj00441" property="email" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <select id="getStaffById" parameterType="String" resultMap="staff">
+        SELECT * FROM sdpj004 WHERE pj00401=#{ID};
+    </select>
+    <select id="getStaffByCoding" parameterType="String" resultMap="staff">
+        SELECT * FROM sdpj004 WHERE pj00421=#{coding};
+    </select>
+    <select id="getNameByCoding" parameterType="String" resultType="String">
+        SELECT pj00402 FROM sdpj004 WHERE pj00421=#{coding};
+    </select>
+    <select id="getNameById" parameterType="String" resultType="String">
+        SELECT pj00402 FROM sdpj004 WHERE pj00401=#{ID};
+    </select>
+    <select id="getProStaff" resultMap="staff">
+        SELECT * FROM sdpj004 WHERE pj00419 in(3,4);
+    </select>
+    <select id="login" resultMap="staff">
+        SELECT a.pj00401,a.pj00402,a.pj00417,a.pj00421,a.pj00441 FROM sdpj004 a RIGHT JOIN sdey003 b ON b.ey00313=a.pj00402 WHERE b.ey00313=#{name} AND a.pj00435=#{passwd};
+    </select>
+
+    <select id="seek" resultMap="staff">
+        SELECT * FROM sdpj004 WHERE pj00402 LIKE '%'+#{str}+'%' ORDER BY pj00402 DESC;
+    </select>
+
+    <select id="getStaffByCount" resultMap="staff">
+        SELECT * FROM sdpj004 WHERE pj00401 in
+        <foreach collection="list" item="co" open="(" close=");" separator=",">
+            #{co.ID}
+        </foreach>
+    </select>
+
+    <select id="getStaffs" resultMap="staff">
+        SELECT * FROM sdpj004;
+    </select>
+</mapper>

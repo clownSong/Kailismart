@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.MyApproveAttachedMapper">
+    <insert id="addApproveAttached" parameterType="com.kailismart.com.entity.MyApproveAttached">
+        INSERT INTO sdpo007
+        (po00701,po00702,po00703,po00704,po00705,po00706,po00707,po00708,po00709,
+        po00710,po00711)
+        VALUES(#{ID},#{approveId},#{sendPersong},#{approvePerson},#{acceptDate},#{po00706},#{po00707},#{po00708},
+        #{po00709},#{po00710},#{po00711});
+    </insert>
+</mapper>

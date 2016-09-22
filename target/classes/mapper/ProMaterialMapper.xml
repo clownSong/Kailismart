@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.ProMaterialMapper">
+    <resultMap id="material" type="com.kailismart.com.entity.ProMaterial">
+        <id column="pm01418" jdbcType="VARCHAR" property="major"></id>
+        <result column="pm01401" jdbcType="VARCHAR" property="proId"></result>
+        <result column="pm01402" property="ID" jdbcType="VARCHAR"></result>
+        <result column="pm01403" property="coding" jdbcType="VARCHAR"></result>
+        <result column="pm01406" property="sum" jdbcType="DECIMAL"></result>
+        <result column="pm01407" property="price" jdbcType="DECIMAL"></result>
+        <result column="pm01408" property="money" jdbcType="DECIMAL"></result>
+        <result column="pm01411" property="inSum" jdbcType="DECIMAL"></result>
+        <result column="pm01413" property="remark" jdbcType="VARCHAR"></result>
+        <result column="pm01414" property="priceTax" jdbcType="DECIMAL"></result>
+        <result column="pm01415" property="moneyTax" jdbcType="DECIMAL"></result>
+        <result column="pm01416" property="taxMoney" jdbcType="DECIMAL"></result>
+        <result column="pm01422" property="projectId" jdbcType="VARCHAR"></result>
+        <association property="unit" column="pm01404"
+                     select="com.kailismart.com.mapper.UnitMapper.getUnit"></association>
+        <association property="material" column="pm01403" select="com.kailismart.com.mapper.MaterialMapper.getMaterialByID"></association>
+    </resultMap>
+    <select id="addMaterial" parameterType="java.util.List">
+        INSERT INTO sdpm014 (pm01401,pm01402,pm01403,pm01404,pm01406,pm01407,pm01408,pm01409,pm01410,
+        pm01413,pm01414,pm01415,pm01416,pm01417,pm01418,pm01422,pm01405,pm01411)
+        VALUES
+        <foreach collection="maters" item="item" index="index" separator="," >
+            (#{proId},#{item.primentId},#{item.ID},#{item.unit.ID},#{item.sum},#{item.price},#{item.money},
+            #{item.applyDate},#{item.dhDate},
+            #{item.remark},#{item.priceTax},#{item.moneyTax},#{item.taxMoney},
+            #{item.cnfParam},#{item.major},#{item.projectId},#{item.pm01405},#{item.inSum})
+        </foreach>
+    </select>
+    <select id="getMaterials" resultMap="material" parameterType="String">
+        SELECT a.*,b.pm03505 as ySum FROM
+        sdpm014 AS a LEFT JOIN sdpm035 AS b ON
+        a.pm01418=b.pm03512 WHERE pm01401=#{id};
+    </select>
+    <select id="getNotMatersByProId" resultMap="material" parameterType="String">
+        SELECT a.*,b.pm03505 as ySum FROM
+        sdpm014 AS a LEFT JOIN sdpm035 AS b ON
+        a.pm01418=b.pm03512 WHERE pm01401=#{id} AND pm01411 &lt; pm01406;
+    </select>
+    <update id="updatePutSum" parameterType="java.util.List">
+        <foreach collection="materList" index="index" item="mater" open="" close="" separator=";">
+            UPDATE sdpm014 SET pm01411=#{mater.inSum},pm01412=#{mater.inDate} WHERE pm01401=#{mater.proId} AND pm01402=#{mater.ID}
+        </foreach>
+    </update>
+    <select id="getCount" parameterType="String" resultType="java.util.Map">
+        SELECT SUM(pm01406) AS ySum,SUM(pm01411) AS putSum FROM sdpm014 WHERE pm01401=#{id};
+    </select>
+    <select id="getMatersById" resultMap="material" parameterType="String">
+        SELECT a.*,b.pm03505 as ySum FROM
+        sdpm014 AS a LEFT JOIN sdpm035 AS b ON
+        a.pm01418=b.pm03512 WHERE pm01402=#{id};
+    </select>
+</mapper>

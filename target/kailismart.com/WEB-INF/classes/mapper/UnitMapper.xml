@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.UnitMapper">
+    <resultMap id="unit" type="com.kailismart.com.entity.Unit">
+        <id column="pa01301" jdbcType="VARCHAR" property="ID"></id>
+        <result column="pa01302" jdbcType="VARCHAR" property="name"></result>
+        <result column="pa01303" jdbcType="VARCHAR" property="remark"></result>
+    </resultMap>
+    <resultMap id="unitJanl" type="com.kailismart.com.entity.Unit">
+        <id column="pa01301" jdbcType="VARCHAR" property="ID"></id>
+        <result column="pa01302" jdbcType="VARCHAR" property="name"></result>
+    </resultMap>
+    <select id="getUnit" resultMap="unitJanl" parameterType="String">
+        SELECT pa01301,pa01302 FROM sdpa013 WHERE pa01301=#{id};
+    </select>
+</mapper>

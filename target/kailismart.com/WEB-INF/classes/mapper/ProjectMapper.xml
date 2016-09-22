@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.ProjectMapper">
+    <resultMap id="project" type="com.kailismart.com.entity.Project">
+        <id column="pa00101" property="ID" jdbcType="VARCHAR" javaType="String"></id>
+        <result column="pa00102" property="name" jdbcType="VARCHAR"></result>
+        <result column="pa00105" property="owner" jdbcType="VARCHAR"></result>
+        <result column="pa00158" property="construction" jdbcType="VARCHAR"></result>
+        <result column="pa00112" property="managerName" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <select id="getProjectByID" parameterType="String" resultMap="project">
+        SELECT * FROM sdpa001 WHERE pa00101=#{ID};
+    </select>
+
+    <select id="getOutPrijectMax" resultMap="com.kailismart.com.mapper.CompanyMapper.count">
+        SELECT TOP 20 pm02004 AS ID,COUNT(pm02004) AS myCount FROM sdpm020 GROUP BY pm02004 ORDER BY COUNT(pm02004) DESC;
+    </select>
+
+    <select id="getProjectByLately" parameterType="java.util.List" resultMap="project">
+        SELECT * FROM sdpa001 WHERE pa00101 IN
+        <foreach collection="list" item="co" open="(" close=");" separator=",">
+            #{co.ID}
+        </foreach>
+    </select>
+
+    <select id="seek" parameterType="String" resultMap="project">
+        SELECT * FROM sdpa001 WHERE pa00102 LIKE '%'+#{str}+'%';
+    </select>
+</mapper>

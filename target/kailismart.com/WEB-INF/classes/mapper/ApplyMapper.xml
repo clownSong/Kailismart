@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.ApplyMapper">
+    <resultMap id="applyJanl" type="com.kailismart.com.entity.Apply">
+        <id column="pm03401" javaType="String" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pm03402" javaType="String" property="projectID" jdbcType="VARCHAR"></result>
+        <result column="pm03403" javaType="String" property="serialNumber" jdbcType="VARCHAR"></result>
+        <result column="pm03404" javaType="byte" property="audit" jdbcType="TINYINT"></result>
+        <result column="pm03406" property="prepareDate" jdbcType="VARCHAR"></result>
+        <result column="pm03408" property="state" jdbcType="INTEGER"></result>
+        <result column="pm03414" property="date" jdbcType="VARCHAR"></result>
+        <association property="project" column="pm03402" select="com.kailismart.com.mapper.ProjectMapper.getProjectByID"></association>
+        <association property="staff" column="pm03407" select="com.kailismart.com.mapper.StaffMapper.getStaffByCoding"></association>
+        <association property="section" column="pm03410" select="com.kailismart.com.mapper.SectionMapper.getSevtionByID"></association>
+        <!--<collection property="applyMaterialList" column="ID" select="com.kailismart.com.mapper.ApplyMaterialMapper.getApplyMaterials"></collection>-->
+    </resultMap>
+    <resultMap id="apply" type="com.kailismart.com.entity.Apply">
+        <id column="pm03401" javaType="String" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pm03402" javaType="String" property="projectID" jdbcType="VARCHAR"></result>
+        <result column="pm03403" javaType="String" property="serialNumber" jdbcType="VARCHAR"></result>
+        <result column="pm03404" javaType="byte" property="audit" jdbcType="TINYINT"></result>
+        <result column="pm03406" property="prepareDate" jdbcType="VARCHAR"></result>
+        <result column="pm03408" property="state" jdbcType="INTEGER"></result>
+        <result column="pm03414" property="date" jdbcType="VARCHAR"></result>
+        <result column="pm03409" property="remark" jdbcType="VARCHAR"></result>
+        <association property="project" column="pm03402" select="com.kailismart.com.mapper.ProjectMapper.getProjectByID"></association>
+        <association property="staff" column="pm03407" select="com.kailismart.com.mapper.StaffMapper.getStaffByCoding"></association>
+        <association property="section" column="pm03410" select="com.kailismart.com.mapper.SectionMapper.getSevtionByID"></association>
+        <collection property="applyMaterialList" column="pm03401" select="com.kailismart.com.mapper.ApplyMaterialMapper.getApplyMaterials"></collection>
+    </resultMap>
+    <select id="getApplyList" resultMap="apply">
+        SELECT * FROM sdpm034 WHERE pm03404 = 1 AND (pm03408 = 0 or pm03408 = 1) ORDER BY pm03406 DESC;
+    </select>
+    <select id="getApplysByDate" resultMap="applyJanl" parameterType="java.util.Map">
+        SELECT * FROM sdpm034 WHERE pm03404=1 AND pm03406 BETWEEN #{map.start} and #{map.end};
+    </select>
+    <update id="updateState" parameterType="map">
+        UPDATE sdpm034 SET pm03408=#{state} WHERE pm03401=#{appId};
+    </update>
+</mapper>

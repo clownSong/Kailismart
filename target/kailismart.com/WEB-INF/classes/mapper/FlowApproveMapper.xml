@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.FlowApproveMapper">
+    <resultMap id="approve" type="com.kailismart.com.entity.FlowApprove">
+        <id column="po00401" property="ID" jdbcType="VARCHAR"></id>
+        <result column="po00402" property="flowMessageId" jdbcType="VARCHAR"></result>
+        <result column="po00403" property="courseId" jdbcType="VARCHAR"></result>
+        <result column="po00404" property="staffId" jdbcType="VARCHAR"></result>
+        <result column="po00405" property="acceptStaffId" jdbcType="VARCHAR"></result>
+        <result column="po00406" property="accrptDate" jdbcType="VARCHAR"></result>
+        <result column="po00407" property="readDate" jdbcType="VARCHAR"></result>
+        <result column="po00408" property="approveDate" jdbcType="VARCHAR"></result>
+        <result column="po00409" property="po00409" jdbcType="INTEGER"></result>
+        <result column="po00410" property="content" jdbcType="VARCHAR"></result>
+        <result column="po00411" property="approveState" jdbcType="INTEGER"></result>
+        <result column="po00412" property="po00412" jdbcType="INTEGER"></result>
+        <result column="po00413" property="date" jdbcType="VARCHAR"></result>
+        <result column="po00414" property="po00414" jdbcType="TINYINT"></result>
+        <result column="po00415" property="po00415" jdbcType="VARCHAR"></result>
+        <result column="po00416" property="po00416" jdbcType="TINYINT"></result>
+        <result column="po00417" property="acceptDate" jdbcType="VARCHAR"></result>
+        <result column="po00418" property="po00418Id" jdbcType="VARCHAR"></result>
+        <result column="po00419" property="po00419" jdbcType="TINYINT"></result>
+        <result column="po00420" property="po00420" jdbcType="TINYINT"></result>
+        <result column="po00421" property="po00421" jdbcType="VARCHAR"></result>
+    </resultMap>
+    <insert id="addApprove" parameterType="com.kailismart.com.entity.FlowApprove">
+        INSERT INTO sdpo004
+        (po00401,po00402,po00403,po00404,po00405,po00409,po00411,po00412,
+        po00413,po00414,po00415,po00416,po00417,po00421,po00406,po00407,po00408,po00418)
+        VALUES(#{ID},#{flowMessageId},#{courseId},#{staffId},#{acceptStaffId},#{po00409},
+        #{approveState},#{po00412},#{date},#{po00414},#{po00415},#{po00416},#{acceptDate},#{po00421},#{accrptDate},#{readDate},#{approveDate},#{po00418Id});
+        INSERT INTO sdpo004_AllRecord
+        (po00401,po00402,po00403,po00404,po00405,po00409,po00411,po00412,
+        po00413,po00414,po00415,po00416,po00417,po00421,po00406,po00407,po00408,po00418)
+        VALUES(#{ID},#{flowMessageId},#{courseId},#{staffId},#{acceptStaffId},#{po00409},
+        #{approveState},#{po00412},#{date},#{po00414},#{po00415},#{po00416},#{acceptDate},#{po00421},#{accrptDate},#{readDate},#{approveDate},#{po00418Id});
+    </insert>
+    <insert id="addPrintShow" parameterType="com.kailismart.com.entity.Sdpo004PrintShow">
+        INSERT INTO sdpo004_printShow
+        (po004_printShow01,po004_printShow02,po004_printShow03)
+        VALUES(#{ID},#{printShow02},#{printShow03});
+    </insert>
+</mapper>

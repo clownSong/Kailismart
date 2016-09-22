@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.MaterialMapper">
+    <resultMap id="material" type="com.kailismart.com.entity.Material">
+        <id column="pm00201" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pm00202" property="name" jdbcType="VARCHAR"></result>
+        <result column="pm00203" property="folder" jdbcType="VARCHAR"></result>
+        <result column="pm00205" property="model" jdbcType="VARCHAR"></result>
+        <result column="pm00206" property="remark" jdbcType="VARCHAR"></result>
+        <result column="pm00207" property="planPrice" jdbcType="DECIMAL"></result>
+        <result column="pm00221" property="brand" jdbcType="VARCHAR"></result>
+        <result column="pm00222" property="producingArea" jdbcType="VARCHAR"></result>
+        <result column="pm00209" property="storageSum" jdbcType="DECIMAL"></result>
+    </resultMap>
+    <resultMap id="mater" type="com.kailismart.com.entity.Material">
+        <id column="pm00201" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pm00202" property="name" jdbcType="VARCHAR"></result>
+        <result column="pm00205" property="model" jdbcType="VARCHAR"></result>
+        <result column="pm00207" property="planPrice" jdbcType="DECIMAL"></result>
+        <result column="pm00221" property="brand" jdbcType="VARCHAR"></result>
+        <result column="pm00222" property="producingArea" jdbcType="VARCHAR"></result>
+        <result column="pm00209" property="storageSum" jdbcType="DECIMAL"></result>
+        <association property="unit" column="pm00227" select="com.kailismart.com.mapper.UnitMapper.getUnit"></association>
+    </resultMap>
+    <select id="getMaterialByID" parameterType="String" resultMap="mater">
+        select pm1.pm00201,pm1.pm00202,pm1.pm00205,pm1.pm00207,pm1.pm00209,pm2.pm00302 AS pm00227,
+			pm1.pm00221,pm1.pm00222,pa1.pa01302 unitName
+        from sdpm002 as pm1
+        LEFT JOIN sdpm003 as pm2 ON pm1.pm00201=pm2.pm00301
+        LEFT JOIN sdpa013 as pa1 ON pa1.pa01301=pm2.pm00302
+        WHERE pm00201=#{ID};
+    </select>
+    <update id="updateMaterSum" parameterType="com.kailismart.com.entity.Material">
+        UPDATE sdpm002 SET pm00209=#{storageSum} WHERE pm00201=#{ID};
+    </update>
+    <update id="updateMaterSums" parameterType="java.util.List">
+       <foreach collection="maters" item="item" separator=";">
+           UPDATE sdpm002 SET pm00209+=#{item.storageSum} WHERE pm00201=#{item.ID};
+       </foreach>
+    </update>
+    <update id="updateMaterSum_" parameterType="com.kailismart.com.entity.Material">
+        UPDATE sdpm002 SET pm00209-=#{storageSum} WHERE pm00201=#{ID};
+    </update>
+
+    <select id="getMaterialByType" resultMap="mater">
+        select pm1.pm00201,pm1.pm00202,pm1.pm00205,pm1.pm00207,pm1.pm00209,pm2.pm00302 AS pm00227,
+			pm1.pm00221,pm1.pm00222,pa1.pa01302 unitName
+        from sdpm002 as pm1
+        LEFT JOIN sdpm003 as pm2 ON pm1.pm00201=pm2.pm00301
+        LEFT JOIN sdpa013 as pa1 ON pa1.pa01301=pm2.pm00302
+        <choose>
+            <when test="str != null and null != type">
+                WHERE pm1.pm00209 &gt; 0 AND pm1.pm00202+pm1.pm00205 LIKE '%'+#{str}+'%';
+            </when>
+            <when test="str != null">
+                WHERE pm1.pm00202+pm1.pm00205 LIKE '%'+#{str}+'%';
+            </when>
+            <when test="type != null">
+                WHERE pm1.pm00209 &gt; 0;
+            </when>
+        </choose>
+    </select>
+</mapper>

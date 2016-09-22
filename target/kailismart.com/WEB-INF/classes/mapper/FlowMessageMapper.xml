@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.FlowMessageMapper">
+    <resultMap id="flowMessage" type="com.kailismart.com.entity.FlowMessage">
+        <id column="po00301" property="ID" jdbcType="VARCHAR"></id>
+        <result column="po00302" property="startDate" jdbcType="VARCHAR"></result>
+        <result column="po00303" property="staffId" jdbcType="VARCHAR"></result>
+        <result column="po00304" property="title" jdbcType="VARCHAR"></result>
+        <result column="po00305" property="content" jdbcType="VARCHAR"></result>
+        <result column="po00306" property="frameCoding" jdbcType="VARCHAR"></result>
+        <result column="po00307" property="frameId" jdbcType="VARCHAR"></result>
+        <result column="po00308" property="state" jdbcType="INTEGER"></result>
+        <result column="po00309" property="po00309" jdbcType="INTEGER"></result>
+        <result column="po00310" property="po00310" jdbcType="INTEGER"></result>
+        <result column="po00311" property="histroryId" jdbcType="VARCHAR"></result>
+        <result column="po00312" property="po00312" jdbcType="INTEGER"></result>
+        <result column="po00313" property="date" jdbcType="VARCHAR"></result>
+        <result column="po00314" property="po00314" jdbcType="VARCHAR"></result>
+        <result column="po00315" property="sql" jdbcType="VARCHAR"></result>
+        <result column="po00316" property="frameColumn" jdbcType="VARCHAR"></result>
+        <result column="po00317" property="po00317" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <insert id="addFlowMessage" parameterType="com.kailismart.com.entity.FlowMessage">
+        INSERT INTO sdpo003 (po00301,po00302,po00303,po00304,po00305,po00306,po00307,
+        po00308,po00309,po00310,po00311,po00312,po00313,po00314,po00315,po00316,po00317)
+        values(#{ID},#{startDate},#{staffId},#{title},#{content},#{frameCoding},#{frameId},
+        #{state},#{po00309},#{po00310},#{histroryId},#{po00312},#{date},#{po00314},#{sql},#{frameColumn},#{po00317});
+    </insert>
+    <insert id="addFlowMessageHistory" parameterType="com.kailismart.com.entity.FlowMessage">
+        INSERT INTO sdpo003_History (po00301,po00302,po00303,po00304,po00305,po00306,po00307,
+        po00308,po00309,po00310,po00311,po00312,po00313,po00314,po00315,po00316,po003_History17)
+        values(#{ID},#{startDate},#{staffId},#{title},#{content},#{frameCoding},#{frameId},
+        #{state},#{po00309},#{po00310},#{histroryId},#{po00312},#{date},#{po00314},#{sql},#{frameColumn},#{po00317});
+    </insert>
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+    <!--指明 controller 所在包，并扫描其中的注解-->
+    <context:component-scan base-package="com.kailismart.com.controller"/>
+    <!--开启注解驱动并指定静态资源位置
+    <mvc:annotation-driven/>-->
+    <!--支持json注释，并指定fasetJson解析-->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- fastjosn spring support -->
+            <bean id="jsonConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes" value="application/json" />
+                <!--防止循环引用问题-->
+                <property name="features">
+                    <array value-type="com.alibaba.fastjson.serializer.SerializerFeature">
+                        <value>DisableCircularReferenceDetect</value>
+                    </array>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/managent/**"/>
+            <bean class="com.kailismart.com.util.MyInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!--spring 3.0后推荐使用该种配置-->
+    <mvc:default-servlet-handler/>
+    <!--spring 3.0以前的写法-->
+    <!--<mvc:resources location="/assets/" mapping="/assets/**"/>-->
+    <!--用于支持Servlet、JSP视图解析-->
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.CoursePersonAttachedMapper">
+    <insert id="addPersonAttached" parameterType="com.kailismart.com.entity.CoursePersonAttached">
+        INSERT INTO sdpo002b (po002b01,po002b02,po002b03,po002b04,po002b05,po002b06,po002b07,po002b08,po002b09,po002b10,po002b11,po002b12,po002b13)
+         VALUES(#{coursePersonId},#{flowHistoryId},#{serial},#{b04},#{staffId},#{b06},#{b07},#{courseId},#{type},#{b10},#{frameId},#{b12},#{b13});
+    </insert>
+</mapper>

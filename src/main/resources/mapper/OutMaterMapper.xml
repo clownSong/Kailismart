@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.OutMaterMapper">
+
+    <resultMap id="outMater" type="com.kailismart.com.entity.MaterOut">
+        <id column="pm02001" jdbcType="VARCHAR" property="ID"></id>
+        <result column="pm02002" jdbcType="VARCHAR" property="outDate"></result>
+        <result column="pm02003" jdbcType="VARCHAR" property="outNumber"></result>
+        <result column="pm02005" jdbcType="VARCHAR" property="pm02005"></result>
+
+        <result column="pm02009" jdbcType="VARCHAR" property="remark"></result>
+        <result column="pm02011" jdbcType="VARCHAR" property="date"></result>
+        <result column="pm02015" jdbcType="VARCHAR" property="putId"></result>
+        <result column="pm02016" jdbcType="VARCHAR" property="approveDate"></result>
+        <result column="pm02017" jdbcType="VARCHAR" property="approveStaff.coding"></result>
+        <result column="pm02019" jdbcType="INTEGER" property="state"></result>
+
+        <association property="outPerson" column="pm02021" select="com.kailismart.com.mapper.StaffMapper.getStaffById"></association>
+        <association property="staff" column="pm02013" select="com.kailismart.com.mapper.StaffMapper.getStaffByCoding"></association>
+        <association property="company" column="pm02008" select="com.kailismart.com.mapper.CompanyMapper.getCompanyById"></association>
+        <association property="section" column="pm02007" select="com.kailismart.com.mapper.SectionMapper.getSevtionByID"></association>
+        <association property="storage" column="pm02006" select="com.kailismart.com.mapper.StorageMapper.getStorageById"></association>
+        <association property="project" column="pm02004" select="com.kailismart.com.mapper.ProjectMapper.getProjectByID"></association>
+    </resultMap>
+
+    <select id="getNowOutMater" resultMap="outMater">
+        SELECT TOP 1 * FROM sdpm020 WHERE pm02002=#{data} AND pm02013=#{name} ORDER BY pm02003 DESC;
+    </select>
+
+    <select id="getOutMaterList" parameterType="java.util.Map" resultMap="outMater">
+        SELECT * FROM sdpm020 WHERE pm02002 BETWEEN #{start} AND #{end} ORDER BY pm02002 DESC;
+    </select>
+    <insert id="addOutMater" parameterType="com.kailismart.com.entity.MaterOut">
+        INSERT INTO sdpm020 (pm02001,pm02002,pm02003,pm02004,pm02005,pm02006,pm02007,pm02008,pm02009
+        ,pm02010,pm02011,pm02012,pm02013,pm02014,pm02015,pm02016,pm02017,pm02018,pm02019,pm02021)
+         values(#{ID},#{outDate},#{outNumber},#{project.ID},#{pm02005},#{storage.ID},#{section.ID},#{company.ID},#{remark},#{pm02010},#{date},#{pm02012},
+         #{staff.coding},#{pm02014},#{putId},#{approveDate},#{approvePersonCoding},#{pm02018},#{state},#{outPerson.ID});
+    </insert>
+
+    <select id="getCountForStaff" resultType="com.kailismart.com.entity.Count">
+        SELECT TOP 20 pm02021 AS id,COUNT(pm02021) AS myCount from sdpm020 GROUP BY pm02021 ORDER BY count(pm02021) DESC;
+    </select>
+
+    <update id="updateState">
+        UPDATE sdpm020 SET pm02019=#{state},pm02017=#{approveStaff.coding},pm02016=#{approveDate} WHERE pm02001=#{ID};
+    </update>
+    <select id="getOutMaterById" resultMap="outMater">
+        SELECT * FROM sdpm020 WHERE pm02001=#{outId};
+    </select>
+    <select id="getOutMaterByProjectId" resultMap="outMater">
+        SELECT * FROM sdpm020 WHERE pm02004=#{projectId};
+    </select>
+</mapper>

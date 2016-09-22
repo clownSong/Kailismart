@@ -1,0 +1,63 @@
+body{
+    background-color: #eff0f4;
+}
+.no-wrap{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.modal-dialog{
+    margin-top:0px;
+    width:100%;
+}
+.modal-header{
+    background-color: #ed9c28;
+}
+.modal-title{
+
+}
+.fixed-table-container{
+    padding-bottom:0px !important;
+}
+.my-hide{
+    display:none;
+}
+.remark{
+    position: absolute;
+    bottom: 90%;
+    height: 130px;
+    overflow: hidden;
+}
+.remark > textarea{
+    width:100%;
+    height:100%;
+    border-bottom: 5px solid #1CAF9A;
+}
+.pagination{
+    margin:0px !important;
+}
+tr{
+    cursor: pointer;
+}
+.red{
+    color:red;
+}
+.waring{
+    color: #3f34ff;
+}
+.dropdown-menu{
+    height:200px;
+    overflow: hidden;
+}
+.datepicker-days td:hover,.datepicker-months span:hover,.datepicker-years span:hover,.table-condensed th:hover{
+    background-color: #7ff4ff;
+}
+.font-white{
+    color: #FFF;
+}
+.font-blank{
+    color:#000;
+}
+.color-red{
+    color:red;
+}

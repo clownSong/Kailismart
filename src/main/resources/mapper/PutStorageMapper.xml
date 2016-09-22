@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.PutStorageMapper">
+    <resultMap id="putStorage" type="com.kailismart.com.entity.PutStorage">
+        <id column="pm02601" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pm02602" property="putDate" jdbcType="VARCHAR"></result>
+        <result column="pm02603" property="putSerial" jdbcType="VARCHAR"></result>
+        <result column="pm02606" property="remark" jdbcType="VARCHAR"></result>
+        <result column="pm02607" property="createDate" jdbcType="VARCHAR"></result>
+        <result column="pm02608" property="pm02608" jdbcType="VARCHAR"></result>
+        <result column="pm02609" property="putPerson" jdbcType="VARCHAR"></result>
+        <result column="pm02610" property="pm02610" jdbcType="VARCHAR"></result>
+        <result column="pm02611" property="pm02611" jdbcType="VARCHAR"></result>
+        <result column="pm02612" property="proId" jdbcType="VARCHAR"></result>
+        <result column="pm02613" property="tax" jdbcType="DECIMAL"></result>
+        <result column="pm02614" property="approveDate" jdbcType="VARCHAR"></result>
+        <result column="pm02615" property="pm02615" jdbcType="VARCHAR"></result>
+        <result column="pm02616" property="approveStaff" jdbcType="VARCHAR"></result>
+        <result column="pm02617" property="approveType" jdbcType="INTEGER"></result>
+        <result column="pm02618" property="payInvoice" jdbcType="VARCHAR"></result>
+        <result column="pm02619" property="mixMoney" jdbcType="DECIMAL"></result>
+        <result column="pm02623" property="putType" jdbcType="TINYINT"></result>
+        <association property="company" column="pm02604" select="com.kailismart.com.mapper.CompanyMapper.getCompanyById"></association>
+        <association property="storage" column="pm02605" select="com.kailismart.com.mapper.StorageMapper.getStorageById"></association>
+
+    </resultMap>
+
+    <resultMap id="putJanl" type="com.kailismart.com.entity.PutStorage">
+        <id column="pm02601" property="ID" jdbcType="VARCHAR"></id>
+        <result column="pm02602" property="putDate" jdbcType="VARCHAR"></result>
+        <result column="pm02603" property="putSerial" jdbcType="VARCHAR"></result>
+        <result column="pm02606" property="remark" jdbcType="VARCHAR"></result>
+        <result column="pm02607" property="createDate" jdbcType="VARCHAR"></result>
+        <result column="pm02613" property="tax" jdbcType="DECIMAL"></result>
+        <result column="pm02614" property="approveDate" jdbcType="VARCHAR"></result>
+        <result column="pm02616" property="approveStaff" jdbcType="VARCHAR"></result>
+        <result column="pm02617" property="approveType" jdbcType="INTEGER"></result>
+        <result column="pm02618" property="payInvoice" jdbcType="VARCHAR"></result>
+        <result column="pm02619" property="mixMoney" jdbcType="DECIMAL"></result>
+        <result column="pm02623" property="putType" jdbcType="TINYINT"></result>
+
+
+        <association property="company" column="pm02604" select="com.kailismart.com.mapper.CompanyMapper.getCompanyById"></association>
+        <association property="storage" column="pm02605" select="com.kailismart.com.mapper.StorageMapper.getStorageById"></association>
+
+        <association property="staff" column="pm02609" select="com.kailismart.com.mapper.StaffMapper.getStaffByCoding"></association>
+
+        <association property="procurement" column="pm02612" select="com.kailismart.com.mapper.ProcurementMapper.getProJanlById"></association>
+
+        <association property="project" column="pm02601" select="com.kailismart.com.mapper.PutStorageMapper.getProjectIdByMater"></association>
+    </resultMap>
+    <insert id="addStorage" parameterType="com.kailismart.com.entity.PutStorage">
+        INSERT INTO sdpm026
+        (pm02601,pm02602,pm02603,pm02604,pm02605,pm02606,pm02607,pm02608,pm02609,pm02610,pm02611,pm02612,pm02613,
+        pm02618,pm02619,pm02623)
+        VALUES(#{ID},#{putDate},#{putSerial},#{company.ID},#{storage.ID},#{remark},#{createDate},#{pm02608},#{putPerson},
+        #{pm02610},#{pm02611},#{proId},#{tax},#{payInvoice},#{mixMoney},#{putType});
+    </insert>
+
+    <select id="getCount" parameterType="java.util.Map" resultType="Integer">
+        SELECT COUNT(pm02602) FROM sdpm026 WHERE pm02602 BETWEEN #{start} AND #{end};
+    </select>
+    <select id="getPutStorages" parameterType="java.util.Map" resultMap="putJanl">
+        SELECT * FROM sdpm026 WHERE
+        <if test="type != null">
+            pm02617=#{type} AND
+        </if>
+        pm02602 BETWEEN #{start} AND #{end} ORDER BY pm02602 DESC;
+    </select>
+
+    <select id="getProjectIdByMater" resultType="com.kailismart.com.entity.Project">
+        SELECT TOP 1 a.pm02723 AS ID ,b.pa00102 AS name FROM sdpm027 AS a LEFT JOIN sdpa001 AS b ON b.pa00101=a.pm02723 WHERE a.pm02701=#{putId} AND a.pm02723 != '';
+    </select>
+
+    <update id="updateApprove" parameterType="java.util.Map">
+        UPDATE sdpm026 SET pm02614=#{date},pm02616=#{person},pm02617=#{state} WHERE pm02601=#{id};
+    </update>
+
+    <update id="updatePutSerial" parameterType="com.kailismart.com.entity.PutStorage">
+        UPDATE sdpm026 SET pm02603=#{putSerial} WHERE pm02601=#{ID};
+    </update>
+    <update id="updatePutDate" parameterType="com.kailismart.com.entity.PutStorage">
+        UPDATE sdpm026 SET pm02602=#{putDate} WHERE pm02601=#{ID};
+    </update>
+    <update id="updatePutRemark" parameterType="com.kailismart.com.entity.PutStorage">
+        UPDATE sdpm026 SET pm02606=#{remark} WHERE pm02601=#{ID};
+    </update>
+    <update id="updatePutTax" parameterType="com.kailismart.com.entity.PutStorage">
+        UPDATE sdpm026 SET pm02613=#{tax} WHERE pm02601=#{ID};
+    </update>
+    <update id="updatePutMixMoney" parameterType="com.kailismart.com.entity.PutStorage">
+        UPDATE sdpm026 SET pm02619=#{mixMoney} WHERE pm02601=#{ID};
+    </update>
+    <delete id="deletePut" parameterType="String">
+        DELETE FROM sdpm026 WHERE pm02601=#{id};
+    </delete>
+    <update id="updatePutMessage" parameterType="com.kailismart.com.entity.PutStorage">
+        UPDATE sdpm026 SET pm02619=#{mixMoney},pm02606=#{remark},pm02602=#{putDate},pm02603=#{putSerial} WHERE pm02601=#{ID};
+    </update>
+
+    <select id="getPutAll" resultMap="putJanl">
+        SELECT * FROM sdpm026 ORDER BY pm02602 DESC;
+    </select>
+    <select id="seekPutStorage" resultMap="putJanl">
+        SELECT * FROM sdpm026 WHERE pm02617=#{type} AND pm02603 LIKE '%'+#{str}+'%' ORDER BY pm02602 DESC;
+    </select>
+
+    <select id="isOut" resultType="String">
+        SELECT TOP 1 pm02015 FROM sdpm020 WHERE pm02015=#{id};
+    </select>
+    <select id="getNowPutSerial" resultType="String">
+        SELECT TOP 1 pm02603 FROM sdpm026 WHERE pm02616=#{coding} AND pm02614=convert(varchar(10),getdate(),120) ORDER BY pm02603 DESC;
+    </select>
+</mapper>

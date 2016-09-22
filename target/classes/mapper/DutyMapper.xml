@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.DutyMapper">
+    <resultMap id="duty" type="com.kailismart.com.entity.Duty">
+        <id column="po01401" jdbcType="VARCHAR" property="ID"></id>
+        <result column="po01402" jdbcType="VARCHAR" property="name"></result>
+        <result column="po01404" jdbcType="VARCHAR" property="parent"></result>
+        <result column="po01405" jdbcType="VARCHAR" property="coding"></result>
+        <result column="po01403" jdbcType="VARCHAR" property="po01403"></result>
+    </resultMap>
+    <select id="getStaffByDuty" resultType="com.kailismart.com.entity.Staff">
+        SELECT a.po02701 AS ID ,b.po01402 AS dutyName,c.pj00402 AS name FROM
+        sdpo027 AS a LEFT JOIN sdpo014 AS b ON
+        a.po02702=b.po01401 LEFT JOIN sdpj004 AS c ON
+        c.pj00401=a.po02701 WHERE b.po01401=#{coding};
+    </select>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.ApplyMaterialMapper">
+    <resultMap id="applyMaterial" type="com.kailismart.com.entity.ApplyMaterial">
+        <result column="pm03501" property="applyID" jdbcType="VARCHAR"></result>
+        <result column="pm03502" property="serialNumber" jdbcType="INTEGER"></result>
+        <result column="pm03503" property="ID" jdbcType="VARCHAR"></result>
+        <result column="pm03504" property="applyDate" jdbcType="VARCHAR"></result>
+        <result column="pm03505" property="sum" jdbcType="DECIMAL"></result>
+        <result column="pm03506" property="planPrice" jdbcType="DECIMAL"></result>
+        <result column="pm03509" property="remark" jdbcType="DECIMAL"></result>
+        <result column="pm03513" property="cnfParam" jdbcType="DECIMAL"></result>
+        <result column="pm03518" property="notSum" jdbcType="DECIMAL"></result>
+        <result column="pm03508" property="ySum" jdbcType="DECIMAL"></result>
+        <result column="pm03512" property="major" jdbcType="VARCHAR"></result>
+        <association property="unit" column="pm03514" select="com.kailismart.com.mapper.UnitMapper.getUnit"></association>
+    </resultMap>
+    <select id="getApplyMaterials" resultMap="applyMaterial" parameterType="String">
+        SELECT p35.pm03501,p35.pm03502,p35.pm03503,p35.pm03504,p35.pm03505,p35.pm03506,p35.pm03509,p35.pm03512,
+			p35.pm03513,p35.pm03514,p35.pm03518,p35.pm03508,test.pm00202 name,test.pm00205 model,pm00207 planPrice,
+			test.pm00221 brand,test.pm00222 producingArea
+          FROM sdpm035 as p35 LEFT JOIN (select pm1.pm00201,pm1.pm00202,pm1.pm00205,pm1.pm00207,
+			pm1.pm00221,pm1.pm00222,pa1.pa01302
+          from sdpm002 as pm1
+          LEFT JOIN sdpm003 as pm2 ON pm1.pm00201=pm2.pm00301
+          LEFT JOIN sdpa013 as pa1 ON pa1.pa01301=pm2.pm00302) AS test ON test.pm00201=p35.pm03503
+          WHERE  p35.pm03501=#{applyID} AND p35.pm03505 &gt; p35.pm03508 ORDER BY p35.pm03502 ASC;
+    </select>
+    <update id="updateMaterial" parameterType="java.util.Map">
+        UPDATE sdpm035 SET pm03508=(pm03508 + #{sum}) WHERE pm03512=#{majoy};
+    </update>
+    <select id="getMaterSums" resultType="java.util.Map" parameterType="String">
+        SELECT SUM(pm03505) AS applySum ,SUM(pm03508) AS ySum FROM sdpm035 WHERE pm03501=#{applyId};
+    </select>
+    <update id="updatePutSum">
+        UPDATE sdpm014 SET pm01411=#{sum},pm01412=#{date} WHERE pm01401=#{proId} AND pm01402=#{materId};
+    </update>
+</mapper>

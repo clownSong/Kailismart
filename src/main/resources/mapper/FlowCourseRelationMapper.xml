@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kailismart.com.mapper.FlowCourseRelationMapper">
+    <resultMap id="relation" type="com.kailismart.com.entity.FlowCourseRelation">
+        <id column="po020_Relation01" property="ID" jdbcType="VARCHAR"></id>
+        <result column="po020_Relation02" property="nextCourseId" jdbcType="VARCHAR"></result>
+        <result column="po020_Relation03" property="currentId" jdbcType="VARCHAR"></result>
+        <result column="po020_Relation04" property="relation04" jdbcType="VARCHAR"></result>
+        <result column="po020_Relation05" property="relation05" jdbcType="INTEGER"></result>
+    </resultMap>
+    <resultMap id="relationChild" type="com.kailismart.com.entity.FlowCourse_Relation">
+        <id column="po020_Relation01" property="ID" jdbcType="VARCHAR"></id>
+        <result column="po020_Relation02" property="nextCourseId" jdbcType="VARCHAR"></result>
+        <result column="po020_Relation03" property="currentId" jdbcType="VARCHAR"></result>
+        <result column="po020_Relation04" property="relation04" jdbcType="VARCHAR"></result>
+        <result column="po020_Relation05" property="relation05" jdbcType="INTEGER"></result>
+    </resultMap>
+    <select id="getRelationByCourseId" parameterType="String" resultMap="relationChild">
+        SELECT * FROM sdpo020_Relation WHERE po020_Relation03=#{courseId};
+    </select>
+    <insert id="addRelationB" parameterType="com.kailismart.com.entity.FlowCourse_Relation">
+        INSERT INTO sdpo020b_Relation
+        (po020_relation01,po020_relation02,po020_relation03,po020_relation04,po020_relation05,po020_relation06)
+        VALUES(#{ID},#{nextCourseId},#{currentId},#{relation04},#{relation05},#{flowHistoryId});
+    </insert>
+</mapper>
